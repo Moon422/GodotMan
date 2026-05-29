@@ -30,8 +30,8 @@ class Program
                             Environment.GetFolderPath(
                                 Environment.SpecialFolder.LocalApplicationData
                             ),
-                            "GodotMan",
-                            "installations.json"
+                            "Normitech",
+                            "GodotMan"
                         )
                     );
                 }
