@@ -1,4 +1,5 @@
 using System;
+using GodotMan.Domain.Enums;
 
 namespace GodotMan.Domain.Entities;
 

@@ -1,3 +1,8 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using GodotMan.Domain.Entities;
+
 namespace GodotMan.Domain.Interfaces;
 
 /// <summary>

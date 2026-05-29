@@ -1,3 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using GodotMan.Domain.Entities;
+using GodotMan.Domain.Enums;
+
 namespace GodotMan.Domain.Interfaces;
 
 /// <summary>
