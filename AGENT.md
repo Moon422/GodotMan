@@ -14,14 +14,14 @@ lets developers download, install, launch, and manage multiple versions of the
 [Godot Engine](https://godotengine.org/), including both the **Standard**
 (GDScript/C++) and **Mono** (.NET/C#) variants.
 
-| Attribute | Value |
-|---|---|
-| UI framework | [Avalonia UI](https://avaloniaui.net/) (cross-platform WPF-style XAML) |
-| Target framework | .NET 8 |
-| GitHub client | [Octokit.NET](https://github.com/octokit/octokit.net) |
-| Architecture | Onion Architecture (domain-centric, DI throughout) |
-| Language | C# 12, nullable enabled, implicit usings enabled |
-| Solution file | `GodotMan.sln` (root) |
+| Attribute        | Value                                                                  |
+| ---------------- | ---------------------------------------------------------------------- |
+| UI framework     | [Avalonia UI](https://avaloniaui.net/) (cross-platform WPF-style XAML) |
+| Target framework | .NET 10                                                                |
+| GitHub client    | [Octokit.NET](https://github.com/octokit/octokit.net)                  |
+| Architecture     | Onion Architecture (domain-centric, DI throughout)                     |
+| Language         | C# 14, nullable enabled, implicit usings disabled                      |
+| Solution file    | `GodotMan.sln` (root)                                                  |
 
 ---
 
@@ -47,12 +47,12 @@ layers never reference outer layers.
 
 ### Layer responsibilities
 
-| Layer | Project | Responsibility |
-|---|---|---|
-| **Domain** | `GodotMan.Domain` | Entities, enums, interface contracts, domain exceptions. Zero NuGet deps. |
-| **Application** | `GodotMan.Application` | Use-case orchestration, DTOs, mappers, service interfaces. References Domain only. |
+| Layer              | Project                   | Responsibility                                                                                                 |
+| ------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Domain**         | `GodotMan.Domain`         | Entities, enums, interface contracts, domain exceptions. Zero NuGet deps.                                      |
+| **Application**    | `GodotMan.Application`    | Use-case orchestration, DTOs, mappers, service interfaces. References Domain only.                             |
 | **Infrastructure** | `GodotMan.Infrastructure` | Octokit.NET GitHub calls, HttpClient downloads, ZIP extraction, JSON file store. Implements Domain interfaces. |
-| **Presentation** | `GodotMan.Presentation` | Avalonia views, ViewModels (MVVM + ReactiveUI), DI composition root. |
+| **Presentation**   | `GodotMan.Presentation`   | Avalonia views, ViewModels (MVVM + ReactiveUI), DI composition root.                                           |
 
 ---
 
@@ -61,7 +61,7 @@ layers never reference outer layers.
 ```
 GodotMan/
 ├── GodotMan.sln
-├── AGENT.md                          ← you are here
+├── AGENT.md
 │
 └── src/
     ├── GodotMan.Domain/
@@ -154,39 +154,23 @@ tests/
 The Domain layer is **fully implemented**. Do not modify existing types without
 updating this document. All types live in `src/GodotMan.Domain/`.
 
-### 4.1 Global usings
-
-The `.csproj` declares global usings, so within the Domain project every type
-below is available without an explicit `using` statement:
-
-```
-GodotMan.Domain.Entities
-GodotMan.Domain.Enums
-GodotMan.Domain.Exceptions
-GodotMan.Domain.Interfaces
-```
-
-Other projects that reference Domain must add their own `using` statements or
-configure their own global usings.
-
----
-
-### 4.2 Entities
+### 4.1 Entities
 
 #### `GodotRelease`
+
 Represents a single published release fetched from the GitHub API.
 
-| Property | Type | Notes |
-|---|---|---|
-| `Version` | `string` | Full tag string, e.g. `"4.3-stable"` |
-| `SemanticVersion` | `System.Version` | Parsed numeric version for sorting |
-| `Stability` | `ReleaseStability` | Stable / RC / Beta / Dev |
-| `Variant` | `GodotVariant` | Standard or Mono |
-| `Assets` | `IReadOnlyList<ReleaseAsset>` | All downloadable files |
-| `ReleasePageUrl` | `string` | GitHub release HTML URL |
-| `ReleaseNotes` | `string?` | Markdown body from GitHub (nullable) |
-| `PublishedAt` | `DateTimeOffset` | UTC publish timestamp |
-| `IsLatestStable` | `bool` | Set by repository after fetching |
+| Property          | Type                          | Notes                                |
+| ----------------- | ----------------------------- | ------------------------------------ |
+| `Version`         | `string`                      | Full tag string, e.g. `"4.3-stable"` |
+| `SemanticVersion` | `System.Version`              | Parsed numeric version for sorting   |
+| `Stability`       | `ReleaseStability`            | Stable / RC / Beta / Dev             |
+| `Variant`         | `GodotVariant`                | Standard or Mono                     |
+| `Assets`          | `IReadOnlyList<ReleaseAsset>` | All downloadable files               |
+| `ReleasePageUrl`  | `string`                      | GitHub release HTML URL              |
+| `ReleaseNotes`    | `string?`                     | Markdown body from GitHub (nullable) |
+| `PublishedAt`     | `DateTimeOffset`              | UTC publish timestamp                |
+| `IsLatestStable`  | `bool`                        | Set by repository after fetching     |
 
 All properties use `required` + `init` — construct with object initializer.
 `ToString()` → `"Godot 4.3-stable (Mono)"`.
@@ -194,37 +178,39 @@ All properties use `required` + `init` — construct with object initializer.
 ---
 
 #### `ReleaseAsset`
+
 A single downloadable file within a `GodotRelease`.
 
-| Property | Type | Notes |
-|---|---|---|
-| `FileName` | `string` | Original GitHub filename |
-| `DownloadUrl` | `string` | Direct download URL |
-| `SizeBytes` | `long` | Raw byte count |
-| `Platform` | `TargetPlatform` | Windows / macOS / Linux / Web / Android / Unknown |
-| `Architecture` | `TargetArchitecture` | X64 / X86 / Arm64 / Arm32 / Universal / Unknown |
-| `IsExportTemplate` | `bool` | True for headless/server templates |
-| `FormattedSize` | `string` (computed) | Human-readable: `"98.4 MB"` |
+| Property           | Type                 | Notes                                             |
+| ------------------ | -------------------- | ------------------------------------------------- |
+| `FileName`         | `string`             | Original GitHub filename                          |
+| `DownloadUrl`      | `string`             | Direct download URL                               |
+| `SizeBytes`        | `long`               | Raw byte count                                    |
+| `Platform`         | `TargetPlatform`     | Windows / macOS / Linux / Web / Android / Unknown |
+| `Architecture`     | `TargetArchitecture` | X64 / X86 / Arm64 / Arm32 / Universal / Unknown   |
+| `IsExportTemplate` | `bool`               | True for headless/server templates                |
+| `FormattedSize`    | `string` (computed)  | Human-readable: `"98.4 MB"`                       |
 
 `ToString()` → `FileName`.
 
 ---
 
 #### `GodotInstallation`
+
 A Godot installation present on disk, persisted in the local store.
 
-| Property | Type | Notes |
-|---|---|---|
-| `Id` | `Guid` | Generated on install, used as stable key |
-| `Version` | `string` | Matches `GodotRelease.Version` |
-| `SemanticVersion` | `System.Version` | For sorting |
-| `Variant` | `GodotVariant` | Standard or Mono |
-| `InstallPath` | `string` | Absolute directory path |
-| `ExecutablePath` | `string` | Absolute path to the `.exe` / binary |
-| `Status` | `InstallationStatus` | See enum below |
-| `InstalledAt` | `DateTimeOffset` | UTC install timestamp |
-| `LastLaunchedAt` | `DateTimeOffset?` | Null until first launch |
-| `IsDefault` | `bool` | System-wide default flag |
+| Property          | Type                 | Notes                                    |
+| ----------------- | -------------------- | ---------------------------------------- |
+| `Id`              | `Guid`               | Generated on install, used as stable key |
+| `Version`         | `string`             | Matches `GodotRelease.Version`           |
+| `SemanticVersion` | `System.Version`     | For sorting                              |
+| `Variant`         | `GodotVariant`       | Standard or Mono                         |
+| `InstallPath`     | `string`             | Absolute directory path                  |
+| `ExecutablePath`  | `string`             | Absolute path to the `.exe` / binary     |
+| `Status`          | `InstallationStatus` | See enum below                           |
+| `InstalledAt`     | `DateTimeOffset`     | UTC install timestamp                    |
+| `LastLaunchedAt`  | `DateTimeOffset?`    | Null until first launch                  |
+| `IsDefault`       | `bool`               | System-wide default flag                 |
 
 Because the record is immutable (`init`), status transitions produce a new
 instance with `with { Status = ... }`.
@@ -232,33 +218,36 @@ instance with `with { Status = ... }`.
 ---
 
 #### `DownloadProgress`
+
 Immutable value object passed through `IProgress<DownloadProgress>` callbacks.
 The UI layer data-binds to the computed properties directly.
 
-| Member | Type | Notes |
-|---|---|---|
-| `BytesReceived` | `long` | Bytes downloaded so far |
-| `TotalBytes` | `long?` | Null when `Content-Length` is absent |
-| `BytesPerSecond` | `double` | Current transfer speed |
-| `AssetFileName` | `string` | Display filename only |
-| `Fraction` | `double?` (computed) | 0.0–1.0, null if total unknown |
-| `PercentageText` | `string` (computed) | `"42 %"` or `"—"` |
-| `SpeedText` | `string` (computed) | `"4.2 MB/s"` |
-| `EtaText` | `string` (computed) | `"1m 24s"` or `"—"` |
-| `IsComplete` | `bool` (computed) | True when `BytesReceived >= TotalBytes` |
-| `Completed(fileName, total)` | static factory | Returns a terminal progress snapshot |
+| Member                       | Type                 | Notes                                   |
+| ---------------------------- | -------------------- | --------------------------------------- |
+| `BytesReceived`              | `long`               | Bytes downloaded so far                 |
+| `TotalBytes`                 | `long?`              | Null when `Content-Length` is absent    |
+| `BytesPerSecond`             | `double`             | Current transfer speed                  |
+| `AssetFileName`              | `string`             | Display filename only                   |
+| `Fraction`                   | `double?` (computed) | 0.0–1.0, null if total unknown          |
+| `PercentageText`             | `string` (computed)  | `"42 %"` or `"—"`                       |
+| `SpeedText`                  | `string` (computed)  | `"4.2 MB/s"`                            |
+| `EtaText`                    | `string` (computed)  | `"1m 24s"` or `"—"`                     |
+| `IsComplete`                 | `bool` (computed)    | True when `BytesReceived >= TotalBytes` |
+| `Completed(fileName, total)` | static factory       | Returns a terminal progress snapshot    |
 
 ---
 
-### 4.3 Enums
+### 4.2 Enums
 
 #### `GodotVariant`
+
 ```
 Standard   // GDScript + C++ (GDExtension), no .NET dependency
 Mono       // Adds full C# support via .NET runtime
 ```
 
 #### `InstallationStatus`
+
 ```
 Available     // On GitHub, not downloaded
 Downloading   // Transfer in progress
@@ -269,29 +258,34 @@ Uninstalling  // Removal in progress
 ```
 
 #### `ReleaseStability`
+
 ```
 Stable             // suffix: "stable"
 ReleaseCandidate   // suffix: "rc1", "rc2", …
 Beta               // suffix: "beta1", …
 Dev                // suffix: "alpha1", "dev1", …
 ```
+
 Derived by `GitHubAssetParser` from the version tag string.
 
 #### `TargetPlatform`
+
 ```
 Windows | macOS | Linux | Web | Android | Unknown
 ```
 
 #### `TargetArchitecture`
+
 ```
 X64 | X86 | Arm64 | Arm32 | Universal | Unknown
 ```
 
 ---
 
-### 4.4 Interfaces
+### 4.3 Interfaces
 
 #### `IGodotReleaseRepository`
+
 **Implemented by:** `Infrastructure.GitHub.GitHubReleaseRepository` (via Octokit.NET)
 
 ```csharp
@@ -316,6 +310,7 @@ on the matching entry before returning.
 ---
 
 #### `IInstallationRepository`
+
 **Implemented by:** `Infrastructure.FileSystem.InstallationRepository` (JSON file store)
 
 ```csharp
@@ -334,6 +329,7 @@ when the record does not exist — the caller is responsible for confirming exis
 ---
 
 #### `IDownloadService`
+
 **Implemented by:** `Infrastructure.Http.FileDownloader`
 
 ```csharp
@@ -352,6 +348,7 @@ Task<long> DownloadAsync(
 ---
 
 #### `IArchiveExtractor`
+
 **Implemented by:** `Infrastructure.FileSystem.ArchiveExtractor`
 
 ```csharp
@@ -366,20 +363,21 @@ Creates `destinationDirectory` if it does not exist.
 
 ---
 
-### 4.5 Exceptions
+### 4.4 Exceptions
 
-| Exception | Inherits | When thrown |
-|---|---|---|
-| `GodotManException` | `Exception` | Base — use a subclass when possible |
-| `ReleaseNotFoundException` | `GodotManException` | GitHub release not found; carries `RequestedVersion` + `RequestedVariant` |
-| `InstallationNotFoundException` | `GodotManException` | Local record not found; carries `InstallationId` or `Version` |
-| `DownloadException` | `GodotManException` | Network / HTTP failure; carries `Url` + optional `HttpStatusCode` |
+| Exception                       | Inherits            | When thrown                                                               |
+| ------------------------------- | ------------------- | ------------------------------------------------------------------------- |
+| `GodotManException`             | `Exception`         | Base — use a subclass when possible                                       |
+| `ReleaseNotFoundException`      | `GodotManException` | GitHub release not found; carries `RequestedVersion` + `RequestedVariant` |
+| `InstallationNotFoundException` | `GodotManException` | Local record not found; carries `InstallationId` or `Version`             |
+| `DownloadException`             | `GodotManException` | Network / HTTP failure; carries `Url` + optional `HttpStatusCode`         |
 
 ---
 
 ## 5. Conventions & coding rules
 
 ### Naming
+
 - **Interfaces** prefixed with `I`: `IGodotReleaseRepository`, `IDownloadService`.
 - **Implementations** named after what they do + suffix: `GitHubReleaseRepository`, `FileDownloader`.
 - **DTOs** suffixed `Dto`: `ReleaseDto`, `InstallationDto`.
@@ -387,6 +385,7 @@ Creates `destinationDirectory` if it does not exist.
 - **Views** suffixed `View` (AXAML): `ReleaseListView.axaml`.
 
 ### Entity construction
+
 All domain entities use `required` properties with `init` setters. Construct
 with object initializers. Mutate with `with` expressions to produce new
 immutable copies:
@@ -398,17 +397,20 @@ var updated = existing with { Status = InstallationStatus.Installed };
 Never add setters or constructors to domain entities.
 
 ### Async
+
 - All I/O methods are `async Task` / `async Task<T>`.
 - Always accept and forward `CancellationToken`. Default to `default` in
   signatures so callers are not forced to pass one.
 - Never use `Task.Result` or `.Wait()` — always `await`.
 
 ### Nullable
+
 Nullable reference types are enabled project-wide. Annotate every nullable
 return type and parameter. Do not suppress warnings with `!` unless you have
 verified the value cannot be null at that point.
 
 ### Error handling
+
 - Throw domain exceptions (`GodotManException` subclasses) for business rule
   violations.
 - Let infrastructure exceptions (`HttpRequestException`, `IOException`) bubble
@@ -417,6 +419,7 @@ verified the value cannot be null at that point.
   infrastructure or application code.
 
 ### Dependency injection
+
 - Register all services via extension methods in `DependencyInjection/` folders:
   `InfrastructureServiceExtensions.cs`, `PresentationServiceExtensions.cs`.
 - Use `IServiceCollection` (Microsoft.Extensions.DependencyInjection).
@@ -424,6 +427,7 @@ verified the value cannot be null at that point.
 - Prefer constructor injection. Never use service locator.
 
 ### Project references (what may reference what)
+
 ```
 Domain          →  (nothing)
 Application     →  Domain
@@ -443,20 +447,20 @@ predictable tag and asset naming convention that `GitHubAssetParser` must
 understand:
 
 ### Tag format
+
 ```
 4.3-stable
-4.3-rc2
-4.3-beta1
-4.4-dev3
 ```
 
 ### Asset filename format
+
 ```
-Godot_v{version}_{platform}{arch}.{ext}
-Godot_v{version}_mono_{platform}{arch}.{ext}
+Godot_v{version}_{platform}.{arch}.{ext}
+Godot_v{version}_mono_{platform}_{arch}.{ext}
 ```
 
 Examples:
+
 ```
 Godot_v4.3-stable_win64.exe.zip          → Standard, Windows, X64
 Godot_v4.3-stable_win32.exe.zip          → Standard, Windows, X86
@@ -464,10 +468,12 @@ Godot_v4.3-stable_macos.universal.zip    → Standard, macOS, Universal
 Godot_v4.3-stable_linux.x86_64.zip       → Standard, Linux, X64
 Godot_v4.3-stable_mono_win64.zip         → Mono, Windows, X64
 Godot_v4.3-stable_mono_macos.universal.zip → Mono, macOS, Universal
+Godot_v4.3-stable_mono_linux_._x86_64.zip       → Standard, Linux, X64
 Godot_v4.3-stable_export_templates.tpz   → Export templates (skip)
 ```
 
 `GitHubAssetParser` must:
+
 1. Detect `_mono_` in the filename → `GodotVariant.Mono`, else `Standard`.
 2. Skip assets whose name contains `export_templates` or ends with `.sha256`.
 3. Parse platform segment: `win` → Windows, `macos`/`osx` → macOS, `linux`/`x11` → Linux, `web` → Web, `android` → Android.
@@ -479,6 +485,7 @@ Godot_v4.3-stable_export_templates.tpz   → Export templates (skip)
 ## 7. Key data flow
 
 ### Browsing releases
+
 ```
 ReleaseListViewModel
   └─ IReleaseService.GetReleasesAsync(variant, includePreReleases)
@@ -488,6 +495,7 @@ ReleaseListViewModel
 ```
 
 ### Installing a release
+
 ```
 InstalledViewModel.InstallCommand(release, asset)
   └─ IInstallationService.InstallAsync(release, asset, progress, ct)
@@ -498,6 +506,7 @@ InstalledViewModel.InstallCommand(release, asset)
 ```
 
 ### Launching an installation
+
 ```
 InstalledViewModel.LaunchCommand(installation)
   └─ IInstallationService.LaunchAsync(installation)
@@ -506,6 +515,7 @@ InstalledViewModel.LaunchCommand(installation)
 ```
 
 ### Uninstalling
+
 ```
 InstalledViewModel.UninstallCommand(installation)
   └─ IInstallationService.UninstallAsync(installation.Id)
