@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GodotMan.Domain.Entities;
 using GodotMan.Domain.Interfaces;
 using GodotMan.Domain.Enums;
 using GodotMan.Services.DTOs;
