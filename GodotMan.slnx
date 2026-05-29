@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="GodotMan.App/GodotMan.App.csproj" />
   <Project Path="GodotMan.Domain/GodotMan.Domain.csproj" />
+  <Project Path="GodotMan.Infrastructure/GodotMan.Infrastructure.csproj" />
   <Project Path="GodotMan.Services/GodotMan.Services.csproj" />
 </Solution>
