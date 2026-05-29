@@ -62,80 +62,78 @@ layers never reference outer layers.
 GodotMan/
 ├── GodotMan.sln
 ├── AGENT.md
+├── GodotMan.Domain/
+│   ├── GodotMan.Domain.csproj
+│   ├── Entities/
+│   │   ├── GodotRelease.cs
+│   │   ├── GodotInstallation.cs
+│   │   ├── ReleaseAsset.cs
+│   │   └── DownloadProgress.cs
+│   ├── Enums/
+│   │   ├── GodotVariant.cs
+│   │   ├── InstallationStatus.cs
+│   │   ├── ReleaseStability.cs
+│   │   ├── TargetPlatform.cs
+│   │   └── TargetArchitecture.cs
+│   ├── Interfaces/
+│   │   ├── IGodotReleaseRepository.cs
+│   │   ├── IInstallationRepository.cs
+│   │   ├── IDownloadService.cs
+│   │   └── IArchiveExtractor.cs
+│   └── Exceptions/
+│       ├── GodotManException.cs
+│       ├── ReleaseNotFoundException.cs
+│       ├── InstallationNotFoundException.cs
+│       └── DownloadException.cs
 │
-└── src/
-    ├── GodotMan.Domain/
-    │   ├── GodotMan.Domain.csproj
-    │   ├── Entities/
-    │   │   ├── GodotRelease.cs
-    │   │   ├── GodotInstallation.cs
-    │   │   ├── ReleaseAsset.cs
-    │   │   └── DownloadProgress.cs
-    │   ├── Enums/
-    │   │   ├── GodotVariant.cs
-    │   │   ├── InstallationStatus.cs
-    │   │   ├── ReleaseStability.cs
-    │   │   ├── TargetPlatform.cs
-    │   │   └── TargetArchitecture.cs
-    │   ├── Interfaces/
-    │   │   ├── IGodotReleaseRepository.cs
-    │   │   ├── IInstallationRepository.cs
-    │   │   ├── IDownloadService.cs
-    │   │   └── IArchiveExtractor.cs
-    │   └── Exceptions/
-    │       ├── GodotManException.cs
-    │       ├── ReleaseNotFoundException.cs
-    │       ├── InstallationNotFoundException.cs
-    │       └── DownloadException.cs
-    │
-    ├── GodotMan.Application/              ← NOT YET IMPLEMENTED
-    │   ├── GodotMan.Application.csproj
-    │   ├── Services/
-    │   │   ├── ReleaseService.cs
-    │   │   ├── InstallationService.cs
-    │   │   └── DownloadService.cs
-    │   ├── DTOs/
-    │   │   ├── ReleaseDto.cs
-    │   │   └── InstallationDto.cs
-    │   ├── Mappers/
-    │   │   └── ReleaseMapper.cs
-    │   └── Interfaces/
-    │       ├── IReleaseService.cs
-    │       └── IInstallationService.cs
-    │
-    ├── GodotMan.Infrastructure/           ← NOT YET IMPLEMENTED
-    │   ├── GodotMan.Infrastructure.csproj
-    │   ├── GitHub/
-    │   │   ├── GitHubReleaseRepository.cs
-    │   │   └── GitHubAssetParser.cs
-    │   ├── FileSystem/
-    │   │   ├── InstallationRepository.cs
-    │   │   └── ArchiveExtractor.cs
-    │   ├── Http/
-    │   │   └── FileDownloader.cs
-    │   └── DependencyInjection/
-    │       └── InfrastructureServiceExtensions.cs
-    │
-    └── GodotMan.Presentation/             ← NOT YET IMPLEMENTED
-        ├── GodotMan.Presentation.csproj
-        ├── App.axaml / App.axaml.cs
-        ├── Program.cs
-        ├── Assets/
-        ├── Views/
-        │   ├── MainWindow.axaml
-        │   ├── ReleaseListView.axaml
-        │   ├── InstalledView.axaml
-        │   └── DownloadProgressView.axaml
-        ├── ViewModels/
-        │   ├── MainWindowViewModel.cs
-        │   ├── ReleaseListViewModel.cs
-        │   ├── InstalledViewModel.cs
-        │   └── DownloadProgressViewModel.cs
-        ├── Controls/
-        │   ├── ReleaseCard.axaml
-        │   └── VariantToggle.axaml
-        └── DependencyInjection/
-            └── PresentationServiceExtensions.cs
+├── GodotMan.Application/              ← NOT YET IMPLEMENTED
+│   ├── GodotMan.Application.csproj
+│   ├── Services/
+│   │   ├── ReleaseService.cs
+│   │   ├── InstallationService.cs
+│   │   └── DownloadService.cs
+│   ├── DTOs/
+│   │   ├── ReleaseDto.cs
+│   │   └── InstallationDto.cs
+│   ├── Mappers/
+│   │   └── ReleaseMapper.cs
+│   └── Interfaces/
+│       ├── IReleaseService.cs
+│       └── IInstallationService.cs
+│
+├── GodotMan.Infrastructure/           ← NOT YET IMPLEMENTED
+│   ├── GodotMan.Infrastructure.csproj
+│   ├── GitHub/
+│   │   ├── GitHubReleaseRepository.cs
+│   │   └── GitHubAssetParser.cs
+│   ├── FileSystem/
+│   │   ├── InstallationRepository.cs
+│   │   └── ArchiveExtractor.cs
+│   ├── Http/
+│   │   └── FileDownloader.cs
+│   └── DependencyInjection/
+│       └── InfrastructureServiceExtensions.cs
+│
+└── GodotMan.Presentation/             ← NOT YET IMPLEMENTED
+    ├── GodotMan.Presentation.csproj
+    ├── App.axaml / App.axaml.cs
+    ├── Program.cs
+    ├── Assets/
+    ├── Views/
+    │   ├── MainWindow.axaml
+    │   ├── ReleaseListView.axaml
+    │   ├── InstalledView.axaml
+    │   └── DownloadProgressView.axaml
+    ├── ViewModels/
+    │   ├── MainWindowViewModel.cs
+    │   ├── ReleaseListViewModel.cs
+    │   ├── InstalledViewModel.cs
+    │   └── DownloadProgressViewModel.cs
+    ├── Controls/
+    │   ├── ReleaseCard.axaml
+    │   └── VariantToggle.axaml
+    └── DependencyInjection/
+        └── PresentationServiceExtensions.cs
 
 tests/
 ├── GodotMan.Domain.Tests/
