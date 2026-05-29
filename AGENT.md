@@ -86,8 +86,8 @@ GodotMan/
 │       ├── InstallationNotFoundException.cs
 │       └── DownloadException.cs
 │
-├── GodotMan.Application/              ← NOT YET IMPLEMENTED
-│   ├── GodotMan.Application.csproj
+├── GodotMan.Services/              ← NOT YET IMPLEMENTED
+│   ├── GodotMan.Services.csproj
 │   ├── Services/
 │   │   ├── ReleaseService.cs
 │   │   ├── InstallationService.cs
@@ -114,8 +114,8 @@ GodotMan/
 │   └── DependencyInjection/
 │       └── InfrastructureServiceExtensions.cs
 │
-└── GodotMan.Presentation/             ← NOT YET IMPLEMENTED
-    ├── GodotMan.Presentation.csproj
+└── GodotMan.App/             ← NOT YET IMPLEMENTED
+    ├── GodotMan.App.csproj
     ├── App.axaml / App.axaml.cs
     ├── Program.cs
     ├── Assets/
