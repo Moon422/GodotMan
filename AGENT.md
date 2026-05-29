@@ -32,11 +32,11 @@ layers never reference outer layers.
 
 ```
 ┌─────────────────────────────────────────┐
-│           Presentation (Avalonia)        │  ← References Application
+│           App (Avalonia)        │  ← References Services
 │  ┌───────────────────────────────────┐  │
-│  │         Infrastructure            │  │  ← References Application + Domain
+│  │         Infrastructure            │  │  ← References Services + Domain
 │  │  ┌─────────────────────────────┐ │  │
-│  │  │       Application           │ │  │  ← References Domain only
+│  │  │       Services           │ │  │  ← References Domain only
 │  │  │  ┌───────────────────────┐ │ │  │
 │  │  │  │       Domain          │ │ │  │  ← No external dependencies
 │  │  │  └───────────────────────┘ │ │  │
@@ -50,9 +50,9 @@ layers never reference outer layers.
 | Layer              | Project                   | Responsibility                                                                                                 |
 | ------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | **Domain**         | `GodotMan.Domain`         | Entities, enums, interface contracts, domain exceptions. Zero NuGet deps.                                      |
-| **Application**    | `GodotMan.Application`    | Use-case orchestration, DTOs, mappers, service interfaces. References Domain only.                             |
+| **Services**       | `GodotMan.Services`       | Use-case orchestration, DTOs, mappers, service interfaces. References Domain only.                             |
 | **Infrastructure** | `GodotMan.Infrastructure` | Octokit.NET GitHub calls, HttpClient downloads, ZIP extraction, JSON file store. Implements Domain interfaces. |
-| **Presentation**   | `GodotMan.Presentation`   | Avalonia views, ViewModels (MVVM + ReactiveUI), DI composition root.                                           |
+| **App**            | `GodotMan.App`            | Avalonia views, ViewModels (MVVM + ReactiveUI), DI composition root.                                           |
 
 ---
 
@@ -528,13 +528,13 @@ InstalledViewModel.UninstallCommand(installation)
 
 Work in this order to avoid blocked dependencies:
 
-1. **`GodotMan.Application`** — service interfaces and implementations.
+1. **`GodotMan.Services`** — service interfaces and implementations.
    All business logic lives here. No UI, no HTTP, no file system calls.
 
 2. **`GodotMan.Infrastructure`** — concrete implementations of Domain
    interfaces. Add NuGet packages: `Octokit`, (HttpClient is built-in).
 
-3. **`GodotMan.Presentation`** — Avalonia project. Add NuGet packages:
+3. **`GodotMan.App`** — Avalonia project. Add NuGet packages:
    `Avalonia`, `Avalonia.Desktop`, `Avalonia.ReactiveUI`.
    Wire up DI in `Program.cs`.
 
