@@ -7,19 +7,20 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />
+    <PackageReference Include="Avalonia" Version="12.0.4"/>
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.4"/>
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4"/>
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4"/>
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8"/>
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.9"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GodotMan.Domain\GodotMan.Domain.csproj" />
-    <ProjectReference Include="..\GodotMan.Services\GodotMan.Services.csproj" />
-    <ProjectReference Include="..\GodotMan.Infrastructure\GodotMan.Infrastructure.csproj" />
+    <ProjectReference Include="..\GodotMan.Domain\GodotMan.Domain.csproj"/>
+    <ProjectReference Include="..\GodotMan.Services\GodotMan.Services.csproj"/>
+    <ProjectReference Include="..\GodotMan.Infrastructure\GodotMan.Infrastructure.csproj"/>
   </ItemGroup>
 </Project>

@@ -101,7 +101,7 @@ GodotMan/
 │       ├── IReleaseService.cs
 │       └── IInstallationService.cs
 │
-├── GodotMan.Infrastructure/           ← NOT YET IMPLEMENTED
+├── GodotMan.Infrastructure/
 │   ├── GodotMan.Infrastructure.csproj
 │   ├── GitHub/
 │   │   ├── GitHubReleaseRepository.cs
