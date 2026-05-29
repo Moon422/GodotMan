@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="GodotMan.App/GodotMan.App.csproj" />
+  <Project Path="GodotMan.Domain/GodotMan.Domain.csproj" />
 </Solution>
