@@ -86,7 +86,7 @@ GodotMan/
 │       ├── InstallationNotFoundException.cs
 │       └── DownloadException.cs
 │
-├── GodotMan.Services/              ← NOT YET IMPLEMENTED
+├── GodotMan.Services/
 │   ├── GodotMan.Services.csproj
 │   ├── Services/
 │   │   ├── ReleaseService.cs
