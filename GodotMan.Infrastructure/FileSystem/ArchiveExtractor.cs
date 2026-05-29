@@ -14,7 +14,8 @@ public sealed class ArchiveExtractor : IArchiveExtractor
     public async Task<string> ExtractAsync(
         string archivePath,
         string destinationDirectory,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(archivePath))
         {
@@ -23,7 +24,10 @@ public sealed class ArchiveExtractor : IArchiveExtractor
 
         if (string.IsNullOrWhiteSpace(destinationDirectory))
         {
-            throw new ArgumentException("Destination directory must not be empty.", nameof(destinationDirectory));
+            throw new ArgumentException(
+                "Destination directory must not be empty.",
+                nameof(destinationDirectory)
+            );
         }
 
         if (!File.Exists(archivePath))
@@ -35,13 +39,24 @@ public sealed class ArchiveExtractor : IArchiveExtractor
 
         try
         {
-            await Task.Run(() => ZipFile.ExtractToDirectory(archivePath, destinationDirectory, overwriteFiles: true), cancellationToken).ConfigureAwait(false);
+            await Task.Run(
+                    () =>
+                        ZipFile.ExtractToDirectory(
+                            archivePath,
+                            destinationDirectory,
+                            overwriteFiles: true
+                        ),
+                    cancellationToken
+                )
+                .ConfigureAwait(false);
             cancellationToken.ThrowIfCancellationRequested();
 
             var executable = FindExecutable(destinationDirectory);
             if (executable is null)
             {
-                throw new InvalidOperationException("Could not locate the Godot executable after extraction.");
+                throw new InvalidOperationException(
+                    "Could not locate the Godot executable after extraction."
+                );
             }
 
             return executable;
@@ -50,7 +65,11 @@ public sealed class ArchiveExtractor : IArchiveExtractor
         {
             throw;
         }
-        catch (Exception ex) when (ex is IOException || ex is InvalidDataException || ex is UnauthorizedAccessException)
+        catch (Exception ex)
+            when (ex is IOException
+                || ex is InvalidDataException
+                || ex is UnauthorizedAccessException
+            )
         {
             throw new GodotManException("Archive extraction failed.", ex);
         }
@@ -58,7 +77,8 @@ public sealed class ArchiveExtractor : IArchiveExtractor
 
     private static string? FindExecutable(string rootDirectory)
     {
-        var candidates = Directory.EnumerateFiles(rootDirectory, "*", SearchOption.AllDirectories)
+        var candidates = Directory
+            .EnumerateFiles(rootDirectory, "*", SearchOption.AllDirectories)
             .Where(file =>
             {
                 var fileName = Path.GetFileName(file);

@@ -11,14 +11,17 @@ public interface IReleaseService
     Task<IReadOnlyList<ReleaseDto>> GetReleasesAsync(
         GodotVariant variant,
         bool includePreReleases = false,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     Task<ReleaseDto?> GetLatestStableReleaseAsync(
         GodotVariant variant,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     Task<ReleaseDto?> GetReleaseByVersionAsync(
         string version,
         GodotVariant variant,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 }

@@ -23,5 +23,5 @@ public enum TargetArchitecture
     Universal,
 
     /// <summary>Architecture not determined or not applicable.</summary>
-    Unknown
+    Unknown,
 }

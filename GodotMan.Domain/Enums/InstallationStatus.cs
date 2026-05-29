@@ -33,5 +33,5 @@ public enum InstallationStatus
     /// <summary>
     /// The installation is in the process of being removed.
     /// </summary>
-    Uninstalling
+    Uninstalling,
 }

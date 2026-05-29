@@ -26,7 +26,8 @@ public interface IGodotReleaseRepository
     Task<IReadOnlyList<GodotRelease>> GetReleasesAsync(
         GodotVariant variant,
         bool includePreReleases = false,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Returns the single latest stable release for the given <paramref name="variant"/>.
@@ -34,7 +35,8 @@ public interface IGodotReleaseRepository
     /// </summary>
     Task<GodotRelease?> GetLatestStableReleaseAsync(
         GodotVariant variant,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
     /// <summary>
     /// Returns the release matching the exact <paramref name="version"/> string
@@ -43,5 +45,6 @@ public interface IGodotReleaseRepository
     Task<GodotRelease?> GetReleaseByVersionAsync(
         string version,
         GodotVariant variant,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 }

@@ -9,30 +9,21 @@ namespace GodotMan.Services.Interfaces;
 
 public interface IInstallationService
 {
-    Task<IReadOnlyList<InstallationDto>> GetAllAsync(
-        CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<InstallationDto>> GetAllAsync(CancellationToken cancellationToken = default);
 
-    Task<InstallationDto?> GetByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default);
+    Task<InstallationDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<InstallationDto?> FindAsync(
         string version,
         GodotVariant variant,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 
-    Task<InstallationDto?> GetDefaultAsync(
-        CancellationToken cancellationToken = default);
+    Task<InstallationDto?> GetDefaultAsync(CancellationToken cancellationToken = default);
 
-    Task AddAsync(
-        InstallationDto installation,
-        CancellationToken cancellationToken = default);
+    Task AddAsync(InstallationDto installation, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(
-        InstallationDto installation,
-        CancellationToken cancellationToken = default);
+    Task UpdateAsync(InstallationDto installation, CancellationToken cancellationToken = default);
 
-    Task RemoveAsync(
-        Guid id,
-        CancellationToken cancellationToken = default);
+    Task RemoveAsync(Guid id, CancellationToken cancellationToken = default);
 }

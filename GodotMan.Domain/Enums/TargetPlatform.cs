@@ -1,6 +1,5 @@
 namespace GodotMan.Domain.Enums;
 
-
 /// <summary>
 /// The operating system a <see cref="ReleaseAsset"/> targets.
 /// </summary>
@@ -26,5 +25,5 @@ public enum TargetPlatform
     Android,
 
     /// <summary>Asset type not recognised (e.g. checksums, source archives).</summary>
-    Unknown
+    Unknown,
 }

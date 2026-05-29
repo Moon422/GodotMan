@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GodotMan.Domain.Enums;
-using OctokitAsset = Octokit.ReleaseAsset;
 using DomainAsset = GodotMan.Domain.Entities.ReleaseAsset;
+using OctokitAsset = Octokit.ReleaseAsset;
 
 namespace GodotMan.Infrastructure.GitHub;
 
 internal static class GitHubAssetParser
 {
-    public static bool TryParseAsset(OctokitAsset githubAsset, string releaseVersion, out DomainAsset? asset)
+    public static bool TryParseAsset(
+        OctokitAsset githubAsset,
+        string releaseVersion,
+        out DomainAsset? asset
+    )
     {
         asset = null;
 
@@ -22,7 +26,11 @@ internal static class GitHubAssetParser
         var lowerName = fileName.ToLowerInvariant();
 
         // Skip non-editor assets
-        if (lowerName.Contains("export_templates") || lowerName.EndsWith(".sha256") || lowerName.Contains("checksum"))
+        if (
+            lowerName.Contains("export_templates")
+            || lowerName.EndsWith(".sha256")
+            || lowerName.Contains("checksum")
+        )
         {
             return false;
         }
@@ -33,7 +41,10 @@ internal static class GitHubAssetParser
         }
 
         var trimmedName = RemoveArchiveExtension(lowerName);
-        if (!TrySplitOnce(trimmedName, '_', out _, out var suffix) || string.IsNullOrWhiteSpace(suffix))
+        if (
+            !TrySplitOnce(trimmedName, '_', out _, out var suffix)
+            || string.IsNullOrWhiteSpace(suffix)
+        )
         {
             return false;
         }
@@ -74,7 +85,7 @@ internal static class GitHubAssetParser
             SizeBytes = githubAsset.Size,
             Platform = platform,
             Architecture = architecture,
-            IsExportTemplate = false
+            IsExportTemplate = false,
         };
 
         return true;
@@ -93,7 +104,12 @@ internal static class GitHubAssetParser
         return fileName;
     }
 
-    private static bool TrySplitOnce(string value, char separator, out string first, out string remainder)
+    private static bool TrySplitOnce(
+        string value,
+        char separator,
+        out string first,
+        out string remainder
+    )
     {
         var index = value.IndexOf(separator);
         if (index < 0)
@@ -108,7 +124,11 @@ internal static class GitHubAssetParser
         return true;
     }
 
-    private static bool TryParsePlatform(string[] tokens, out TargetPlatform platform, out TargetArchitecture architecture)
+    private static bool TryParsePlatform(
+        string[] tokens,
+        out TargetPlatform platform,
+        out TargetArchitecture architecture
+    )
     {
         platform = TargetPlatform.Unknown;
         architecture = TargetArchitecture.Unknown;
@@ -132,7 +152,10 @@ internal static class GitHubAssetParser
         }
 
         // macOS
-        if (first.StartsWith("macos", StringComparison.Ordinal) || first.StartsWith("osx", StringComparison.Ordinal))
+        if (
+            first.StartsWith("macos", StringComparison.Ordinal)
+            || first.StartsWith("osx", StringComparison.Ordinal)
+        )
         {
             platform = TargetPlatform.MacOS;
             architecture = ParseArchitecture(tokens.Skip(1));
@@ -140,7 +163,10 @@ internal static class GitHubAssetParser
         }
 
         // Linux
-        if (first.StartsWith("linux", StringComparison.Ordinal) || first.StartsWith("x11", StringComparison.Ordinal))
+        if (
+            first.StartsWith("linux", StringComparison.Ordinal)
+            || first.StartsWith("x11", StringComparison.Ordinal)
+        )
         {
             platform = TargetPlatform.Linux;
             architecture = ParseArchitecture(tokens.Skip(1).Prepend(first));
@@ -166,7 +192,10 @@ internal static class GitHubAssetParser
         return false;
     }
 
-    private static bool TryCoerceWindowsArchitecture(string token, out TargetArchitecture architecture)
+    private static bool TryCoerceWindowsArchitecture(
+        string token,
+        out TargetArchitecture architecture
+    )
     {
         architecture = TargetArchitecture.Unknown;
 
@@ -196,14 +225,22 @@ internal static class GitHubAssetParser
                 return TargetArchitecture.X64;
             }
 
-            if (normalized.Contains("x64", StringComparison.Ordinal) && !normalized.Contains("x86_64", StringComparison.Ordinal))
+            if (
+                normalized.Contains("x64", StringComparison.Ordinal)
+                && !normalized.Contains("x86_64", StringComparison.Ordinal)
+            )
             {
                 return TargetArchitecture.X64;
             }
 
-            if (normalized.Contains("x86_32", StringComparison.Ordinal)
-                || (normalized.Contains("x86", StringComparison.Ordinal) && normalized.Contains("32", StringComparison.Ordinal))
-                || normalized.Equals("32", StringComparison.Ordinal))
+            if (
+                normalized.Contains("x86_32", StringComparison.Ordinal)
+                || (
+                    normalized.Contains("x86", StringComparison.Ordinal)
+                    && normalized.Contains("32", StringComparison.Ordinal)
+                )
+                || normalized.Equals("32", StringComparison.Ordinal)
+            )
             {
                 return TargetArchitecture.X86;
             }
@@ -213,8 +250,13 @@ internal static class GitHubAssetParser
                 return TargetArchitecture.Arm64;
             }
 
-            if (normalized.Contains("arm32", StringComparison.Ordinal)
-                || (normalized.Contains("arm", StringComparison.Ordinal) && normalized.Contains("32", StringComparison.Ordinal)))
+            if (
+                normalized.Contains("arm32", StringComparison.Ordinal)
+                || (
+                    normalized.Contains("arm", StringComparison.Ordinal)
+                    && normalized.Contains("32", StringComparison.Ordinal)
+                )
+            )
             {
                 return TargetArchitecture.Arm32;
             }

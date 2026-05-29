@@ -15,5 +15,5 @@ public enum GodotVariant
     /// The Mono / .NET build. Adds full C# support via the .NET runtime.
     /// Requires a compatible .NET SDK to be installed separately.
     /// </summary>
-    Mono
+    Mono,
 }

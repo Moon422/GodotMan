@@ -23,7 +23,8 @@ public sealed class FileDownloader : IDownloadService
         string url,
         string destinationPath,
         IProgress<DownloadProgress>? progress = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(url))
         {
@@ -32,32 +33,42 @@ public sealed class FileDownloader : IDownloadService
 
         if (string.IsNullOrWhiteSpace(destinationPath))
         {
-            throw new ArgumentException("Destination path must not be empty.", nameof(destinationPath));
+            throw new ArgumentException(
+                "Destination path must not be empty.",
+                nameof(destinationPath)
+            );
         }
 
         var directory = Path.GetDirectoryName(destinationPath);
         if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
         {
-            throw new DirectoryNotFoundException($"Destination directory does not exist: {directory}");
+            throw new DirectoryNotFoundException(
+                $"Destination directory does not exist: {directory}"
+            );
         }
 
         try
         {
-            using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            using var response = await _httpClient
+                .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+                .ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
                 throw new DownloadException(url, (int)response.StatusCode);
             }
 
             var contentLength = response.Content.Headers.ContentLength;
-            await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            await using var responseStream = await response
+                .Content.ReadAsStreamAsync(cancellationToken)
+                .ConfigureAwait(false);
             await using var fileStream = new FileStream(
                 destinationPath,
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None,
                 81920,
-                useAsync: true);
+                useAsync: true
+            );
 
             var buffer = new byte[81920];
             long totalBytesRead = 0;
@@ -67,31 +78,39 @@ public sealed class FileDownloader : IDownloadService
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var bytesRead = await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken).ConfigureAwait(false);
+                var bytesRead = await responseStream
+                    .ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken)
+                    .ConfigureAwait(false);
                 if (bytesRead == 0)
                 {
                     break;
                 }
 
-                await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(false);
+                await fileStream
+                    .WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken)
+                    .ConfigureAwait(false);
                 totalBytesRead += bytesRead;
 
                 var elapsed = stopwatch.Elapsed;
                 if (progress is not null && elapsed - lastReport >= TimeSpan.FromMilliseconds(500))
                 {
-                    progress.Report(new DownloadProgress
-                    {
-                        AssetFileName = Path.GetFileName(destinationPath),
-                        BytesReceived = totalBytesRead,
-                        TotalBytes = contentLength,
-                        BytesPerSecond = totalBytesRead / Math.Max(1.0, elapsed.TotalSeconds)
-                    });
+                    progress.Report(
+                        new DownloadProgress
+                        {
+                            AssetFileName = Path.GetFileName(destinationPath),
+                            BytesReceived = totalBytesRead,
+                            TotalBytes = contentLength,
+                            BytesPerSecond = totalBytesRead / Math.Max(1.0, elapsed.TotalSeconds),
+                        }
+                    );
 
                     lastReport = elapsed;
                 }
             }
 
-            progress?.Report(DownloadProgress.Completed(Path.GetFileName(destinationPath), totalBytesRead));
+            progress?.Report(
+                DownloadProgress.Completed(Path.GetFileName(destinationPath), totalBytesRead)
+            );
             return totalBytesRead;
         }
         catch (OperationCanceledException)

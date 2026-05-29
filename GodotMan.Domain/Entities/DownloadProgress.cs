@@ -23,15 +23,12 @@ public sealed class DownloadProgress
     /// or null when total size is unknown.
     /// </summary>
     public double? Fraction =>
-        TotalBytes is > 0
-            ? Math.Clamp((double)BytesReceived / TotalBytes.Value, 0, 1)
-            : null;
+        TotalBytes is > 0 ? Math.Clamp((double)BytesReceived / TotalBytes.Value, 0, 1) : null;
 
     /// <summary>
     /// Percentage string for display, e.g. "42 %" or "—" when unknown.
     /// </summary>
-    public string PercentageText =>
-        Fraction is { } f ? $"{f * 100:F0} %" : "—";
+    public string PercentageText => Fraction is { } f ? $"{f * 100:F0} %" : "—";
 
     /// <summary>Current download speed in bytes per second.</summary>
     public required double BytesPerSecond { get; init; }
@@ -42,7 +39,7 @@ public sealed class DownloadProgress
         {
             >= 1_048_576 => $"{BytesPerSecond / 1_048_576:F1} MB/s",
             >= 1_024 => $"{BytesPerSecond / 1_024:F1} KB/s",
-            _ => $"{BytesPerSecond:F0} B/s"
+            _ => $"{BytesPerSecond:F0} B/s",
         };
 
     /// <summary>Estimated time remaining, or null when speed/total is unknown.</summary>
@@ -60,8 +57,7 @@ public sealed class DownloadProgress
             : "—";
 
     /// <summary>True once the download has completed (all bytes received).</summary>
-    public bool IsComplete =>
-        TotalBytes.HasValue && BytesReceived >= TotalBytes.Value;
+    public bool IsComplete => TotalBytes.HasValue && BytesReceived >= TotalBytes.Value;
 
     /// <summary>The asset being downloaded (filename only, for display).</summary>
     public required string AssetFileName { get; init; }
@@ -72,6 +68,6 @@ public sealed class DownloadProgress
             AssetFileName = assetFileName,
             BytesReceived = totalBytes,
             TotalBytes = totalBytes,
-            BytesPerSecond = 0
+            BytesPerSecond = 0,
         };
 }

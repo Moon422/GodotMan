@@ -13,7 +13,8 @@ public static class InfrastructureServiceExtensions
         this IServiceCollection services,
         string installationStorePath,
         string gitHubOwner = "godotengine",
-        string gitHubRepository = "godot")
+        string gitHubRepository = "godot"
+    )
     {
         if (services is null)
         {
@@ -22,11 +23,19 @@ public static class InfrastructureServiceExtensions
 
         if (string.IsNullOrWhiteSpace(installationStorePath))
         {
-            throw new ArgumentException("Installation store path must not be empty.", nameof(installationStorePath));
+            throw new ArgumentException(
+                "Installation store path must not be empty.",
+                nameof(installationStorePath)
+            );
         }
 
-        services.AddSingleton<IGodotReleaseRepository>(_ => new GitHubReleaseRepository(gitHubOwner, gitHubRepository));
-        services.AddSingleton<IInstallationRepository>(_ => new InstallationRepository(installationStorePath));
+        services.AddSingleton<IGodotReleaseRepository>(_ => new GitHubReleaseRepository(
+            gitHubOwner,
+            gitHubRepository
+        ));
+        services.AddSingleton<IInstallationRepository>(_ => new InstallationRepository(
+            installationStorePath
+        ));
         services.AddSingleton<IDownloadService, FileDownloader>();
         services.AddSingleton<IArchiveExtractor, ArchiveExtractor>();
 

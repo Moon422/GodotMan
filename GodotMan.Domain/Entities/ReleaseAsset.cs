@@ -36,7 +36,7 @@ public sealed class ReleaseAsset
             >= 1_073_741_824 => $"{SizeBytes / 1_073_741_824.0:F1} GB",
             >= 1_048_576 => $"{SizeBytes / 1_048_576.0:F1} MB",
             >= 1_024 => $"{SizeBytes / 1_024.0:F1} KB",
-            _ => $"{SizeBytes} B"
+            _ => $"{SizeBytes} B",
         };
 
     public override string ToString() => FileName;

@@ -18,20 +18,25 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
     private readonly string _owner;
     private readonly string _repository;
 
-    public GitHubReleaseRepository(
-        string owner,
-        string repository,
-        GitHubClient? client = null)
+    public GitHubReleaseRepository(string owner, string repository, GitHubClient? client = null)
     {
-        _owner = !string.IsNullOrWhiteSpace(owner) ? owner : throw new ArgumentException("GitHub owner must not be empty.", nameof(owner));
-        _repository = !string.IsNullOrWhiteSpace(repository) ? repository : throw new ArgumentException("GitHub repository must not be empty.", nameof(repository));
+        _owner = !string.IsNullOrWhiteSpace(owner)
+            ? owner
+            : throw new ArgumentException("GitHub owner must not be empty.", nameof(owner));
+        _repository = !string.IsNullOrWhiteSpace(repository)
+            ? repository
+            : throw new ArgumentException(
+                "GitHub repository must not be empty.",
+                nameof(repository)
+            );
         _client = client ?? new GitHubClient(new ProductHeaderValue("GodotMan"));
     }
 
     public async Task<IReadOnlyList<GodotRelease>> GetReleasesAsync(
         GodotVariant variant,
         bool includePreReleases = false,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         var allReleases = await LoadAllReleasesAsync(cancellationToken).ConfigureAwait(false);
         var parsedReleases = allReleases
@@ -53,9 +58,11 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
 
     public async Task<GodotRelease?> GetLatestStableReleaseAsync(
         GodotVariant variant,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
-        var releases = await GetReleasesAsync(variant, includePreReleases: true, cancellationToken).ConfigureAwait(false);
+        var releases = await GetReleasesAsync(variant, includePreReleases: true, cancellationToken)
+            .ConfigureAwait(false);
         return releases
             .Where(release => release.Stability == ReleaseStability.Stable)
             .OrderByDescending(release => release.SemanticVersion)
@@ -65,18 +72,24 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
     public async Task<GodotRelease?> GetReleaseByVersionAsync(
         string version,
         GodotVariant variant,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(version))
         {
             throw new ArgumentException("Version must not be empty.", nameof(version));
         }
 
-        var releases = await GetReleasesAsync(variant, includePreReleases: true, cancellationToken).ConfigureAwait(false);
-        return releases.FirstOrDefault(release => string.Equals(release.Version, version, StringComparison.OrdinalIgnoreCase));
+        var releases = await GetReleasesAsync(variant, includePreReleases: true, cancellationToken)
+            .ConfigureAwait(false);
+        return releases.FirstOrDefault(release =>
+            string.Equals(release.Version, version, StringComparison.OrdinalIgnoreCase)
+        );
     }
 
-    private async Task<List<OctokitRelease>> LoadAllReleasesAsync(CancellationToken cancellationToken)
+    private async Task<List<OctokitRelease>> LoadAllReleasesAsync(
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -87,7 +100,9 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
             while (true)
             {
                 options.StartPage = pageNum;
-                var page = await _client.Repository.Release.GetAll(_owner, _repository, options).ConfigureAwait(false);
+                var page = await _client
+                    .Repository.Release.GetAll(_owner, _repository, options)
+                    .ConfigureAwait(false);
 
                 if (page.Count == 0)
                 {
@@ -120,8 +135,8 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
 
         // Filter assets that match the requested variant before parsing
         var variantFilter = variant == GodotVariant.Mono ? "_mono_" : "_";
-        var assets = release.Assets
-            .Where(asset =>
+        var assets = release
+            .Assets.Where(asset =>
             {
                 var lower = asset.Name?.ToLowerInvariant() ?? "";
                 // Mono assets have "_mono_" in filename, standard do not
@@ -169,7 +184,7 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
             ReleasePageUrl = release.HtmlUrl ?? string.Empty,
             ReleaseNotes = release.Body,
             PublishedAt = release.PublishedAt.GetValueOrDefault(DateTimeOffset.MinValue),
-            IsLatestStable = false
+            IsLatestStable = false,
         };
     }
 
@@ -192,7 +207,13 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
                 ReleasePageUrl = release.ReleasePageUrl,
                 ReleaseNotes = release.ReleaseNotes,
                 PublishedAt = release.PublishedAt,
-                IsLatestStable = latestStableVersion is not null && string.Equals(release.Version, latestStableVersion, StringComparison.OrdinalIgnoreCase)
+                IsLatestStable =
+                    latestStableVersion is not null
+                    && string.Equals(
+                        release.Version,
+                        latestStableVersion,
+                        StringComparison.OrdinalIgnoreCase
+                    ),
             })
             .ToList();
     }
@@ -212,7 +233,9 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
         return lower.Contains("-stable", StringComparison.Ordinal) ? ReleaseStability.Stable
             : lower.Contains("-rc", StringComparison.Ordinal) ? ReleaseStability.ReleaseCandidate
             : lower.Contains("-beta", StringComparison.Ordinal) ? ReleaseStability.Beta
-            : lower.Contains("-alpha", StringComparison.Ordinal) || lower.Contains("-dev", StringComparison.Ordinal) ? ReleaseStability.Dev
+            : lower.Contains("-alpha", StringComparison.Ordinal)
+            || lower.Contains("-dev", StringComparison.Ordinal)
+                ? ReleaseStability.Dev
             : ReleaseStability.Dev;
     }
 }

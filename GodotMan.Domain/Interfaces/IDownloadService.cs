@@ -33,5 +33,6 @@ public interface IDownloadService
         string url,
         string destinationPath,
         IProgress<DownloadProgress>? progress = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 }

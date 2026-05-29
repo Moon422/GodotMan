@@ -25,5 +25,6 @@ public interface IArchiveExtractor
     Task<string> ExtractAsync(
         string archivePath,
         string destinationDirectory,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default
+    );
 }

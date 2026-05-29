@@ -15,5 +15,5 @@ public enum ReleaseStability
     Beta,
 
     /// <summary>Alpha / development snapshot — may be unstable (suffix: "alpha1", "dev1", …).</summary>
-    Dev
+    Dev,
 }

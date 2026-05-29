@@ -38,7 +38,7 @@ public sealed class InstallationRepository : IInstallationRepository
         {
             PropertyNameCaseInsensitive = true,
             WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         };
         _jsonOptions.Converters.Add(new VersionJsonConverter());
     }
@@ -49,19 +49,28 @@ public sealed class InstallationRepository : IInstallationRepository
         return Path.Combine(path, "GodotMan", "installations.json");
     }
 
-    public async Task<IReadOnlyList<GodotInstallation>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<GodotInstallation>> GetAllAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         var installations = await LoadAsync(cancellationToken).ConfigureAwait(false);
         return installations.OrderByDescending(i => i.SemanticVersion).ToList();
     }
 
-    public async Task<GodotInstallation?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<GodotInstallation?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
     {
         var installations = await GetAllAsync(cancellationToken).ConfigureAwait(false);
         return installations.FirstOrDefault(i => i.Id == id);
     }
 
-    public async Task<GodotInstallation?> FindAsync(string version, GodotVariant variant, CancellationToken cancellationToken = default)
+    public async Task<GodotInstallation?> FindAsync(
+        string version,
+        GodotVariant variant,
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(version))
         {
@@ -69,16 +78,24 @@ public sealed class InstallationRepository : IInstallationRepository
         }
 
         var installations = await GetAllAsync(cancellationToken).ConfigureAwait(false);
-        return installations.FirstOrDefault(i => string.Equals(i.Version, version, StringComparison.OrdinalIgnoreCase) && i.Variant == variant);
+        return installations.FirstOrDefault(i =>
+            string.Equals(i.Version, version, StringComparison.OrdinalIgnoreCase)
+            && i.Variant == variant
+        );
     }
 
-    public async Task<GodotInstallation?> GetDefaultAsync(CancellationToken cancellationToken = default)
+    public async Task<GodotInstallation?> GetDefaultAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         var installations = await GetAllAsync(cancellationToken).ConfigureAwait(false);
         return installations.FirstOrDefault(i => i.IsDefault);
     }
 
-    public async Task AddAsync(GodotInstallation installation, CancellationToken cancellationToken = default)
+    public async Task AddAsync(
+        GodotInstallation installation,
+        CancellationToken cancellationToken = default
+    )
     {
         if (installation is null)
         {
@@ -88,14 +105,19 @@ public sealed class InstallationRepository : IInstallationRepository
         var installations = await LoadAsync(cancellationToken).ConfigureAwait(false);
         if (installations.Any(i => i.Id == installation.Id))
         {
-            throw new InvalidOperationException($"Installation with ID '{installation.Id}' already exists.");
+            throw new InvalidOperationException(
+                $"Installation with ID '{installation.Id}' already exists."
+            );
         }
 
         installations.Add(installation);
         await SaveAsync(installations, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task UpdateAsync(GodotInstallation installation, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(
+        GodotInstallation installation,
+        CancellationToken cancellationToken = default
+    )
     {
         if (installation is null)
         {
@@ -106,7 +128,9 @@ public sealed class InstallationRepository : IInstallationRepository
         var index = installations.FindIndex(i => i.Id == installation.Id);
         if (index < 0)
         {
-            throw new InvalidOperationException($"Installation with ID '{installation.Id}' does not exist.");
+            throw new InvalidOperationException(
+                $"Installation with ID '{installation.Id}' does not exist."
+            );
         }
 
         installations[index] = installation;
@@ -134,8 +158,15 @@ public sealed class InstallationRepository : IInstallationRepository
 
         try
         {
-            await using var stream = File.Open(_storePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var installations = await JsonSerializer.DeserializeAsync<List<GodotInstallation>>(stream, _jsonOptions, cancellationToken).ConfigureAwait(false);
+            await using var stream = File.Open(
+                _storePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read
+            );
+            var installations = await JsonSerializer
+                .DeserializeAsync<List<GodotInstallation>>(stream, _jsonOptions, cancellationToken)
+                .ConfigureAwait(false);
             return installations ?? new List<GodotInstallation>();
         }
         catch (JsonException ex)
@@ -144,17 +175,31 @@ public sealed class InstallationRepository : IInstallationRepository
         }
     }
 
-    private async Task SaveAsync(List<GodotInstallation> installations, CancellationToken cancellationToken)
+    private async Task SaveAsync(
+        List<GodotInstallation> installations,
+        CancellationToken cancellationToken
+    )
     {
-        await using var stream = File.Open(_storePath, FileMode.Create, FileAccess.Write, FileShare.None);
-        await JsonSerializer.SerializeAsync(stream, installations, _jsonOptions, cancellationToken).ConfigureAwait(false);
+        await using var stream = File.Open(
+            _storePath,
+            FileMode.Create,
+            FileAccess.Write,
+            FileShare.None
+        );
+        await JsonSerializer
+            .SerializeAsync(stream, installations, _jsonOptions, cancellationToken)
+            .ConfigureAwait(false);
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 }
 
 internal sealed class VersionJsonConverter : JsonConverter<Version>
 {
-    public override Version? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override Version? Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         if (reader.TokenType != JsonTokenType.String)
         {

@@ -2,7 +2,6 @@ using System;
 
 namespace GodotMan.Domain.Exceptions;
 
-
 /// <summary>
 /// Base exception for all domain-level errors in GodotMan.
 /// Prefer a specific subclass when one exists.
