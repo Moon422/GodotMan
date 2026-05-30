@@ -4,11 +4,14 @@ using ReactiveUI.Avalonia;
 
 namespace GodotMan.App.Views;
 
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class InstalledView : ReactiveUserControl<InstalledViewModel>
 {
-    public MainWindow()
+    public InstalledView()
     {
         InitializeComponent();
-        this.WhenActivated(disposables => { });
+        this.WhenActivated(disposables =>
+        {
+            _ = disposables;
+        });
     }
 }

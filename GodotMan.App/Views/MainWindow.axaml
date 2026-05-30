@@ -1,15 +1,17 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:GodotMan.App.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
-        x:Class="GodotMan.App.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="GodotMan - Godot Engine Manager"
-        Width="1024" Height="768"
-        MinWidth="800" MinHeight="600">
+<reactiveUi:ReactiveWindow x:TypeArguments="vm:MainWindowViewModel"
+                           xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:vm="using:GodotMan.App.ViewModels"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:reactiveUi="http://reactiveui.net"
+                           mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+                           x:Class="GodotMan.App.Views.MainWindow"
+                           x:DataType="vm:MainWindowViewModel"
+                           Icon="/Assets/avalonia-logo.ico"
+                           Title="GodotMan - Godot Engine Manager"
+                           Width="1024" Height="768"
+                           MinWidth="800" MinHeight="600">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -36,10 +38,11 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="vm:ReleaseListViewModel">
                             <Button Content="{Binding}"
-                                    Padding="12,6" Foreground="Black"
-                                    Name="TabButton"/>
+                                    Command="{Binding $parent[Window].DataContext.SelectTabCommand}"
+                                    CommandParameter="{Binding}"
+                                    Padding="12,6" Foreground="Black"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -71,21 +74,9 @@
                 </StackPanel>
             </Border>
 
-            <!-- Content Area -->
-            <ContentControl Grid.Column="1" Content="{Binding SelectedTab}" Padding="16">
-                <ContentControl.DataTemplates>
-                    <DataTemplate DataType="vm:ReleaseListViewModel">
-                        <TextBlock Text="Release List View" FontSize="14"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="vm:InstalledViewModel">
-                        <TextBlock Text="Installed View" FontSize="14"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="vm:DownloadProgressViewModel">
-                        <TextBlock Text="Download Progress View" FontSize="14"/>
-                    </DataTemplate>
-                </ContentControl.DataTemplates>
-            </ContentControl>
+            <!-- Content Area — ViewLocator in App.axaml handles ViewModel → View mapping -->
+            <ContentControl Grid.Column="1" Content="{Binding SelectedTab}" Padding="16"/>
         </Grid>
     </DockPanel>
 
-</Window>
+</reactiveUi:ReactiveWindow>
