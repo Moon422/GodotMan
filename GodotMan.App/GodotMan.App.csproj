@@ -7,26 +7,31 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\"/>
-    <AvaloniaResource Include="Assets\**"/>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.4"/>
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.4"/>
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4"/>
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4"/>
+    <PackageReference Include="Avalonia" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1"/>
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.9"/>
-    <PackageReference Include="ReactiveUI" Version="23.2.27"/>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8"/>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.8"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.8"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.8"/>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.9" />
+    <PackageReference Include="ReactiveUI" Version="23.2.27" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GodotMan.Domain\GodotMan.Domain.csproj" />
+    <ProjectReference Include="..\GodotMan.Services\GodotMan.Services.csproj" />
+    <ProjectReference Include="..\GodotMan.Infrastructure\GodotMan.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
