@@ -2,9 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using GodotMan.Domain.Enums;
 using GodotMan.Services.DTOs;
 using GodotMan.Services.Interfaces;
@@ -19,20 +17,40 @@ public partial class ReleaseListViewModel : ViewModelBase
 
     public GodotVariant Variant { get; }
 
-    [ObservableProperty]
-    private ObservableCollection<ReleaseDto> releases = [];
+    private ObservableCollection<ReleaseDto> _releases = [];
+    public ObservableCollection<ReleaseDto> Releases
+    {
+        get => _releases;
+        set => this.RaiseAndSetIfChanged(ref _releases, value);
+    }
 
-    [ObservableProperty]
-    private ReleaseDto? selectedRelease;
+    private ReleaseDto? _selectedRelease;
+    public ReleaseDto? SelectedRelease
+    {
+        get => _selectedRelease;
+        set => this.RaiseAndSetIfChanged(ref _selectedRelease, value);
+    }
 
-    [ObservableProperty]
-    private bool isLoading;
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+    }
 
-    [ObservableProperty]
-    private string statusMessage = "Ready";
+    private string _statusMessage = "Ready";
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+    }
 
-    [ObservableProperty]
-    private bool includePreReleases;
+    private bool _includePreReleases;
+    public bool IncludePreReleases
+    {
+        get => _includePreReleases;
+        set => this.RaiseAndSetIfChanged(ref _includePreReleases, value);
+    }
 
     public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
     public ReactiveCommand<ReleaseDto, Unit> InstallCommand { get; }
@@ -105,5 +123,4 @@ public partial class ReleaseListViewModel : ViewModelBase
 
     public override string ToString() => $"Godot {Variant} Releases";
 
-    public ViewModelActivator Activator { get; } = new();
 }

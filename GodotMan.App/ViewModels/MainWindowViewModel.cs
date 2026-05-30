@@ -16,17 +16,33 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IReleaseService _releaseService;
     private readonly IInstallationService _installationService;
 
-    [ObservableProperty]
-    private ObservableCollection<ReleaseListViewModel> tabs = [];
+    private ObservableCollection<ReleaseListViewModel> _tabs = [];
+    public ObservableCollection<ReleaseListViewModel> Tabs
+    {
+        get => _tabs;
+        set => this.RaiseAndSetIfChanged(ref _tabs, value);
+    }
 
-    [ObservableProperty]
-    private ViewModelBase? selectedTab;
+    private ViewModelBase? _selectedTab;
+    public ViewModelBase? SelectedTab
+    {
+        get => _selectedTab;
+        set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+    }
 
-    [ObservableProperty]
-    private string statusMessage = "Ready";
+    private string _statusMessage = "Ready";
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+    }
 
-    [ObservableProperty]
-    private bool isLoading;
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+    }
 
     public ReactiveCommand<Unit, Unit> LoadCommand { get; }
     public ReactiveCommand<ViewModelBase, Unit> SelectTabCommand { get; }
@@ -115,5 +131,4 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public ViewModelActivator Activator { get; } = new();
 }

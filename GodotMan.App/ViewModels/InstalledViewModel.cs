@@ -2,9 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using GodotMan.Domain.Enums;
 using GodotMan.Services.DTOs;
 using GodotMan.Services.Interfaces;
@@ -17,20 +15,40 @@ public partial class InstalledViewModel : ViewModelBase
     private readonly IInstallationService _installationService;
     private readonly IReleaseService _releaseService;
 
-    [ObservableProperty]
-    private ObservableCollection<InstallationDto> installations = [];
+    private ObservableCollection<InstallationDto> _installations = [];
+    public ObservableCollection<InstallationDto> Installations
+    {
+        get => _installations;
+        set => this.RaiseAndSetIfChanged(ref _installations, value);
+    }
 
-    [ObservableProperty]
-    private InstallationDto? selectedInstallation;
+    private InstallationDto? _selectedInstallation;
+    public InstallationDto? SelectedInstallation
+    {
+        get => _selectedInstallation;
+        set => this.RaiseAndSetIfChanged(ref _selectedInstallation, value);
+    }
 
-    [ObservableProperty]
-    private bool isLoading;
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+    }
 
-    [ObservableProperty]
-    private string statusMessage = "Ready";
+    private string _statusMessage = "Ready";
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+    }
 
-    [ObservableProperty]
-    private bool showOnlyInstalled;
+    private bool _showOnlyInstalled;
+    public bool ShowOnlyInstalled
+    {
+        get => _showOnlyInstalled;
+        set => this.RaiseAndSetIfChanged(ref _showOnlyInstalled, value);
+    }
 
     public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
     public ReactiveCommand<InstallationDto, Unit> LaunchCommand { get; }
@@ -145,5 +163,4 @@ public partial class InstalledViewModel : ViewModelBase
 
     public override string ToString() => "Installed Godot Versions";
 
-    public ViewModelActivator Activator { get; } = new();
 }

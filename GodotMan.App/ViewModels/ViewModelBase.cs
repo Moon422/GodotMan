@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using ReactiveUI;
 
 namespace GodotMan.App.ViewModels;
 
-public abstract class ViewModelBase : ObservableObject
+public abstract class ViewModelBase : ReactiveObject, IActivatableViewModel
 {
+    public ViewModelActivator Activator { get; } = new();
 }

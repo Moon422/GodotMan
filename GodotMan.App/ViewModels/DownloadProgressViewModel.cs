@@ -1,45 +1,88 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 
 namespace GodotMan.App.ViewModels;
 
 public partial class DownloadProgressViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private string assetFileName = "";
+    private string _assetFileName = "";
+    public string AssetFileName
+    {
+        get => _assetFileName;
+        set => this.RaiseAndSetIfChanged(ref _assetFileName, value);
+    }
 
-    [ObservableProperty]
-    private long bytesReceived;
+    private long _bytesReceived;
+    public long BytesReceived
+    {
+        get => _bytesReceived;
+        set => this.RaiseAndSetIfChanged(ref _bytesReceived, value);
+    }
 
-    [ObservableProperty]
-    private long? totalBytes;
+    private long? _totalBytes;
+    public long? TotalBytes
+    {
+        get => _totalBytes;
+        set => this.RaiseAndSetIfChanged(ref _totalBytes, value);
+    }
 
-    [ObservableProperty]
-    private double bytesPerSecond;
+    private double _bytesPerSecond;
+    public double BytesPerSecond
+    {
+        get => _bytesPerSecond;
+        set => this.RaiseAndSetIfChanged(ref _bytesPerSecond, value);
+    }
 
-    [ObservableProperty]
-    private double? fraction;
+    private double? _fraction;
+    public double? Fraction
+    {
+        get => _fraction;
+        set => this.RaiseAndSetIfChanged(ref _fraction, value);
+    }
 
-    [ObservableProperty]
-    private string percentageText = "—";
+    private string _percentageText = "—";
+    public string PercentageText
+    {
+        get => _percentageText;
+        set => this.RaiseAndSetIfChanged(ref _percentageText, value);
+    }
 
-    [ObservableProperty]
-    private string speedText = "—";
+    private string _speedText = "—";
+    public string SpeedText
+    {
+        get => _speedText;
+        set => this.RaiseAndSetIfChanged(ref _speedText, value);
+    }
 
-    [ObservableProperty]
-    private string etaText = "—";
+    private string _etaText = "—";
+    public string EtaText
+    {
+        get => _etaText;
+        set => this.RaiseAndSetIfChanged(ref _etaText, value);
+    }
 
-    [ObservableProperty]
-    private bool isComplete;
+    private bool _isComplete;
+    public bool IsComplete
+    {
+        get => _isComplete;
+        set => this.RaiseAndSetIfChanged(ref _isComplete, value);
+    }
 
-    [ObservableProperty]
-    private string statusMessage = "Ready to download";
+    private string _statusMessage = "Ready";
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+    }
 
-    [ObservableProperty]
-    private bool canCancel;
+    private bool _canCancel;
+    public bool CanCancel
+    {
+        get => _canCancel;
+        set => this.RaiseAndSetIfChanged(ref _canCancel, value);
+    }
 
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
     public ReactiveCommand<Unit, Unit> CompleteCommand { get; }
@@ -138,5 +181,4 @@ public partial class DownloadProgressViewModel : ViewModelBase
         CanCancel = false;
     }
 
-    public ViewModelActivator Activator { get; } = new();
 }
