@@ -220,11 +220,17 @@ public sealed class GitHubReleaseRepository : IGodotReleaseRepository
 
     private static bool TryParseSemanticVersion(string version, out Version versionValue)
     {
-        versionValue = new Version(0, 0);
         var index = version.IndexOf('-');
         var baseVersion = index >= 0 ? version[..index] : version;
 
-        return Version.TryParse(baseVersion, out versionValue);
+        if (Version.TryParse(baseVersion, out Version? parsed) && parsed is not null)
+        {
+            versionValue = parsed;
+            return true;
+        }
+
+        versionValue = new Version(0, 0);
+        return false;
     }
 
     private static ReleaseStability ParseStability(string version)
