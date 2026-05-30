@@ -63,10 +63,12 @@ public partial class InstalledViewModel : ViewModelBase
 
     public InstalledViewModel(
         IReleaseService releaseService,
-        IInstallationService installationService)
+        IInstallationService installationService
+    )
     {
         _releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
-        _installationService = installationService ?? throw new ArgumentNullException(nameof(installationService));
+        _installationService =
+            installationService ?? throw new ArgumentNullException(nameof(installationService));
 
         RefreshCommand = ReactiveCommand.CreateFromTask(RefreshInstallations);
         LaunchCommand = ReactiveCommand.CreateFromTask<InstallationDto>(LaunchInstallation);
@@ -74,9 +76,7 @@ public partial class InstalledViewModel : ViewModelBase
         SetDefaultCommand = ReactiveCommand.CreateFromTask<InstallationDto>(SetDefaultInstallation);
 
         // Load data on activation
-        this.Activator.Activated
-            .Take(1)
-            .InvokeCommand(RefreshCommand);
+        this.Activator.Activated.Take(1).InvokeCommand(RefreshCommand);
     }
 
     private async System.Threading.Tasks.Task RefreshInstallations()
@@ -113,7 +113,8 @@ public partial class InstalledViewModel : ViewModelBase
 
     private async System.Threading.Tasks.Task LaunchInstallation(InstallationDto? installation)
     {
-        if (installation == null) return;
+        if (installation == null)
+            return;
 
         try
         {
@@ -129,7 +130,8 @@ public partial class InstalledViewModel : ViewModelBase
 
     private async System.Threading.Tasks.Task UninstallInstallation(InstallationDto? installation)
     {
-        if (installation == null) return;
+        if (installation == null)
+            return;
 
         try
         {
@@ -146,7 +148,8 @@ public partial class InstalledViewModel : ViewModelBase
 
     private async System.Threading.Tasks.Task SetDefaultInstallation(InstallationDto? installation)
     {
-        if (installation == null) return;
+        if (installation == null)
+            return;
 
         try
         {
@@ -162,5 +165,4 @@ public partial class InstalledViewModel : ViewModelBase
     }
 
     public override string ToString() => "Installed Godot Versions";
-
 }

@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using GodotMan.App.ViewModels;
 using GodotMan.App.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GodotMan.App.DependencyInjection;
 

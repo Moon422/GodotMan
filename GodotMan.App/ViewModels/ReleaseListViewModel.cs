@@ -64,10 +64,12 @@ public partial class ReleaseListViewModel : ViewModelBase
     public ReleaseListViewModel(
         IReleaseService releaseService,
         IInstallationService installationService,
-        GodotVariant variant)
+        GodotVariant variant
+    )
     {
         _releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
-        _installationService = installationService ?? throw new ArgumentNullException(nameof(installationService));
+        _installationService =
+            installationService ?? throw new ArgumentNullException(nameof(installationService));
         Variant = variant;
 
         RefreshCommand = ReactiveCommand.CreateFromTask(RefreshReleases);
@@ -79,9 +81,7 @@ public partial class ReleaseListViewModel : ViewModelBase
             .InvokeCommand(RefreshCommand);
 
         // Load data on activation
-        this.Activator.Activated
-            .Take(1)
-            .InvokeCommand(RefreshCommand);
+        this.Activator.Activated.Take(1).InvokeCommand(RefreshCommand);
     }
 
     private async System.Threading.Tasks.Task RefreshReleases()
@@ -108,7 +108,8 @@ public partial class ReleaseListViewModel : ViewModelBase
 
     private async System.Threading.Tasks.Task InstallRelease(ReleaseDto? release)
     {
-        if (release == null) return;
+        if (release == null)
+            return;
 
         try
         {
@@ -122,5 +123,4 @@ public partial class ReleaseListViewModel : ViewModelBase
     }
 
     public override string ToString() => $"Godot {Variant} Releases";
-
 }

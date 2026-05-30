@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using GodotMan.Domain.Enums;
 using GodotMan.Services.Interfaces;
 using ReactiveUI;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace GodotMan.App.ViewModels;
 
@@ -57,10 +57,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel(
         IReleaseService releaseService,
-        IInstallationService installationService)
+        IInstallationService installationService
+    )
     {
         _releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
-        _installationService = installationService ?? throw new ArgumentNullException(nameof(installationService));
+        _installationService =
+            installationService ?? throw new ArgumentNullException(nameof(installationService));
 
         // Create commands
         LoadCommand = ReactiveCommand.CreateFromTask(LoadInitialData);
@@ -69,9 +71,7 @@ public partial class MainWindowViewModel : ViewModelBase
         NavigateToInstalledCommand = ReactiveCommand.Create(NavigateToInstalled);
 
         // Load data on activation
-        this.Activator.Activated
-            .Take(1)
-            .InvokeCommand(LoadCommand);
+        this.Activator.Activated.Take(1).InvokeCommand(LoadCommand);
     }
 
     private async System.Threading.Tasks.Task LoadInitialData()
@@ -82,8 +82,16 @@ public partial class MainWindowViewModel : ViewModelBase
             StatusMessage = "Loading releases...";
 
             // Create tabs for Standard and Mono variants
-            var standardTab = new ReleaseListViewModel(_releaseService, _installationService, GodotVariant.Standard);
-            var monoTab = new ReleaseListViewModel(_releaseService, _installationService, GodotVariant.Mono);
+            var standardTab = new ReleaseListViewModel(
+                _releaseService,
+                _installationService,
+                GodotVariant.Standard
+            );
+            var monoTab = new ReleaseListViewModel(
+                _releaseService,
+                _installationService,
+                GodotVariant.Mono
+            );
 
             Tabs = new ObservableCollection<ReleaseListViewModel> { standardTab, monoTab };
             SelectedTab = standardTab;
@@ -130,5 +138,4 @@ public partial class MainWindowViewModel : ViewModelBase
             SelectedTab = installedTab;
         }
     }
-
 }

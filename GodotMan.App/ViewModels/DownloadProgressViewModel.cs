@@ -93,11 +93,8 @@ public partial class DownloadProgressViewModel : ViewModelBase
         CompleteCommand = ReactiveCommand.Create(CompleteDownload);
 
         // Update progress display when values change
-        this.WhenAnyValue(
-            x => x.BytesReceived,
-            x => x.TotalBytes,
-            x => x.BytesPerSecond
-        ).Subscribe(_ => UpdateProgressText());
+        this.WhenAnyValue(x => x.BytesReceived, x => x.TotalBytes, x => x.BytesPerSecond)
+            .Subscribe(_ => UpdateProgressText());
     }
 
     private void UpdateProgressText()
@@ -180,5 +177,4 @@ public partial class DownloadProgressViewModel : ViewModelBase
         StatusMessage = "Download completed successfully";
         CanCancel = false;
     }
-
 }

@@ -25,26 +25,30 @@ sealed class Program
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                // Compute app data path
-                var appDataPath = Path.Join(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Normitech",
-                    "GodotMan"
-                );
+        Microsoft
+            .Extensions.Hosting.Host.CreateDefaultBuilder(args)
+            .ConfigureServices(
+                (context, services) =>
+                {
+                    // Compute app data path
+                    var appDataPath = Path.Join(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Normitech",
+                        "GodotMan"
+                    );
 
-                // Register infrastructure services (repositories, download service, extractors)
-                services.AddInfrastructureServices(appDataPath);
+                    // Register infrastructure services (repositories, download service, extractors)
+                    services.AddInfrastructureServices(appDataPath);
 
-                // Register presentation services (ViewModels, Views)
-                services.AddPresentationServices();
-            });
+                    // Register presentation services (ViewModels, Views)
+                    services.AddPresentationServices();
+                }
+            );
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    public static AppBuilder BuildAvaloniaApp() =>
+        AppBuilder
+            .Configure<App>()
             .UsePlatformDetect()
 #if DEBUG
             .WithDeveloperTools()
