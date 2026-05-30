@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using GodotMan.Domain.Enums;
 using GodotMan.Services.DTOs;
@@ -10,42 +10,43 @@ using ReactiveUI;
 
 namespace GodotMan.App.ViewModels;
 
-public partial class ReleaseListViewModel : ViewModelBase
+public class ReleaseListViewModel : ViewModelBase
 {
     private readonly IReleaseService _releaseService;
     private readonly IInstallationService _installationService;
 
+    private ObservableCollection<ReleaseDto> _releases = [];
+    private ReleaseDto? _selectedRelease;
+    private bool _isLoading;
+    private string _statusMessage = "Ready";
+    private bool _includePreReleases;
+
     public GodotVariant Variant { get; }
 
-    private ObservableCollection<ReleaseDto> _releases = [];
     public ObservableCollection<ReleaseDto> Releases
     {
         get => _releases;
         set => this.RaiseAndSetIfChanged(ref _releases, value);
     }
 
-    private ReleaseDto? _selectedRelease;
     public ReleaseDto? SelectedRelease
     {
         get => _selectedRelease;
         set => this.RaiseAndSetIfChanged(ref _selectedRelease, value);
     }
 
-    private bool _isLoading;
     public bool IsLoading
     {
         get => _isLoading;
         set => this.RaiseAndSetIfChanged(ref _isLoading, value);
     }
 
-    private string _statusMessage = "Ready";
     public string StatusMessage
     {
         get => _statusMessage;
         set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
     }
 
-    private bool _includePreReleases;
     public bool IncludePreReleases
     {
         get => _includePreReleases;
@@ -64,12 +65,10 @@ public partial class ReleaseListViewModel : ViewModelBase
     public ReleaseListViewModel(
         IReleaseService releaseService,
         IInstallationService installationService,
-        GodotVariant variant
-    )
+        GodotVariant variant)
     {
         _releaseService = releaseService ?? throw new ArgumentNullException(nameof(releaseService));
-        _installationService =
-            installationService ?? throw new ArgumentNullException(nameof(installationService));
+        _installationService = installationService ?? throw new ArgumentNullException(nameof(installationService));
         Variant = variant;
 
         RefreshCommand = ReactiveCommand.CreateFromTask(RefreshReleases);
@@ -81,7 +80,10 @@ public partial class ReleaseListViewModel : ViewModelBase
             .InvokeCommand(RefreshCommand);
 
         // Load data on activation
-        this.Activator.Activated.Take(1).InvokeCommand(RefreshCommand);
+        this.WhenActivated(disposables =>
+        {
+            disposables.Add(RefreshCommand.Execute().Subscribe());
+        });
     }
 
     private async System.Threading.Tasks.Task RefreshReleases()
@@ -108,8 +110,7 @@ public partial class ReleaseListViewModel : ViewModelBase
 
     private async System.Threading.Tasks.Task InstallRelease(ReleaseDto? release)
     {
-        if (release == null)
-            return;
+        if (release == null) return;
 
         try
         {

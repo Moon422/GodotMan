@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:GodotMan.App.ViewModels"
+             xmlns:dto="using:GodotMan.Services.DTOs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="GodotMan.App.Views.ReleaseListView"
              x:DataType="vm:ReleaseListViewModel">
@@ -12,17 +13,13 @@
         <Border DockPanel.Dock="Top" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Padding="12,12,12,12">
             <StackPanel Orientation="Horizontal" Spacing="12">
                 <TextBlock Text="Godot Releases" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
-
                 <TextBlock Text="{Binding Variant}" FontSize="14" Foreground="#999999" VerticalAlignment="Center"/>
-
                 <CheckBox Content="Include Pre-releases"
                           IsChecked="{Binding IncludePreReleases}"
                           VerticalAlignment="Center"/>
-
                 <Button Content="↻ Refresh"
                         Command="{Binding RefreshCommand}"
                         Padding="12,6"/>
-
                 <ProgressBar IsVisible="{Binding IsLoading}"
                              Width="20" Height="20"
                              IsIndeterminate="True"/>
@@ -37,13 +34,14 @@
         <ScrollViewer DockPanel.Dock="Top">
             <ItemsControl ItemsSource="{Binding Releases}" Margin="12">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type dto:ReleaseDto}">
                         <Border BorderBrush="#CCCCCC" BorderThickness="1" Padding="12" CornerRadius="4" Margin="0,4">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,16,0">
                                     <TextBlock Text="{Binding Version}" FontSize="14" FontWeight="Bold"/>
                                     <TextBlock Text="{Binding Stability}" FontSize="11" Foreground="#999999"/>
-                                    <TextBlock FontSize="11" Foreground="#999999" Name="DateBlock"/>
+                                    <TextBlock Text="{Binding PublishedAt, StringFormat=\{0:MMM d, yyyy\}}"
+                                               FontSize="11" Foreground="#999999"/>
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="1" Text="{Binding ReleaseNotes}"
@@ -52,8 +50,11 @@
                                            Margin="0,0,16,0"/>
 
                                 <StackPanel Grid.Column="2" Spacing="4" HorizontalAlignment="Right">
-                                    <TextBlock FontSize="11" Foreground="#999999" Name="AssetsBlock"/>
-                                    <Button Content="Install" Padding="12,6"/>
+                                    <TextBlock Text="{Binding Assets.Count, StringFormat=\{0\} assets}"
+                                               FontSize="11" Foreground="#999999"/>
+                                    <Button Content="Install" Padding="12,6"
+                                            Command="{Binding $parent[UserControl].((vm:ReleaseListViewModel)DataContext).InstallCommand}"
+                                            CommandParameter="{Binding}"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
