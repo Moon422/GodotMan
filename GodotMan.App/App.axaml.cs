@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using GodotMan.App.ViewModels;
 using GodotMan.App.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GodotMan.App;
 
@@ -20,10 +21,15 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            // Resolve MainWindow and its ViewModel from the DI container
+            var serviceProvider = Program.Host?.Services;
+            if (serviceProvider != null)
             {
-                DataContext = new MainWindowViewModel(),
-            };
+                var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+                var viewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
+                mainWindow.DataContext = viewModel;
+                desktop.MainWindow = mainWindow;
+            }
         }
 
         base.OnFrameworkInitializationCompleted();

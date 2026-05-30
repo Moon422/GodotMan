@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="40"
+             x:Class="GodotMan.App.Controls.VariantToggle">
+
+    <Border Background="#F0F0F0"
+            BorderBrush="#CCCCCC"
+            BorderThickness="1"
+            CornerRadius="4"
+            Height="40">
+
+        <Grid ColumnDefinitions="*,*">
+            <!-- Standard Button -->
+            <Button Grid.Column="0"
+                    Content="Standard"
+                    Name="StandardButton"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="Transparent"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="#CCCCCC"/>
+
+            <!-- Mono Button -->
+            <Button Grid.Column="1"
+                    Content="Mono"
+                    Name="MonoButton"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="Transparent"
+                    BorderThickness="0"/>
+        </Grid>
+    </Border>
+
+</UserControl>

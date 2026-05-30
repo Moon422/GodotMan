@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="120"
+             x:Class="GodotMan.App.Controls.ReleaseCard">
+
+    <Border Background="White"
+            BorderBrush="#CCCCCC"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="12">
+
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <!-- Left: Version Info -->
+            <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,16,0">
+                <TextBlock FontSize="14" FontWeight="Bold" Name="VersionBlock"/>
+                <TextBlock FontSize="11" Foreground="#999999" Name="StabilityBlock"/>
+                <TextBlock FontSize="11" Foreground="#999999" Name="DateBlock"/>
+            </StackPanel>
+
+            <!-- Center: Release Notes Preview -->
+            <TextBlock Grid.Column="1"
+                       FontSize="12" TextWrapping="Wrap"
+                       MaxLines="2" VerticalAlignment="Center"
+                       Margin="0,0,16,0" Name="NotesBlock"/>
+
+            <!-- Right: Asset Info and Install Button -->
+            <StackPanel Grid.Column="2" Spacing="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock FontSize="11" Foreground="#999999" Name="AssetsBlock"/>
+                <Button Content="Install" Padding="12,6" Name="InstallButton"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</UserControl>
