@@ -19,7 +19,7 @@
             <ProgressBar Value="{Binding Fraction}"
                          Maximum="1.0"
                          Height="24"
-                         IsIndeterminate="{Binding TotalBytes, Converter={StaticResource ObjectNullToBoolConverter}}"/>
+                         IsIndeterminate="{Binding TotalBytes, Converter={x:Static ObjectConverters.IsNull}}"/>
 
             <Grid ColumnDefinitions="*,Auto,Auto,Auto">
                 <TextBlock Grid.Column="0" Text="{Binding PercentageText}" FontWeight="Bold" HorizontalAlignment="Left"/>

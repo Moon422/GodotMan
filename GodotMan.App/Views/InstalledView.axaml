@@ -69,7 +69,7 @@
                    Text="No Godot installations found. Go to Releases to download and install."
                    Foreground="#999999" HorizontalAlignment="Center" VerticalAlignment="Center"
                    Margin="12" FontSize="14"
-                   IsVisible="{Binding Installations.Count}"/>
+                   IsVisible="{Binding Installations.Count, Converter={x:Static ObjectConverters.IsNull}}"/>
     </DockPanel>
 
 </UserControl>

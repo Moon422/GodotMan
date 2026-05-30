@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using Avalonia;
-using Avalonia.ReactiveUI;
 using GodotMan.App.DependencyInjection;
 using GodotMan.Infrastructure.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReactiveUI.Avalonia;
 
 namespace GodotMan.App;
 
@@ -36,6 +36,8 @@ sealed class Program
                         "Normitech",
                         "GodotMan"
                     );
+
+                    services.AddApplicationServices();
 
                     // Register infrastructure services (repositories, download service, extractors)
                     services.AddInfrastructureServices(appDataPath);

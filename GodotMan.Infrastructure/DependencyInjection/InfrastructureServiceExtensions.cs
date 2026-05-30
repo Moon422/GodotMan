@@ -3,12 +3,21 @@ using GodotMan.Domain.Interfaces;
 using GodotMan.Infrastructure.FileSystem;
 using GodotMan.Infrastructure.GitHub;
 using GodotMan.Infrastructure.Http;
+using GodotMan.Services.Interfaces;
+using GodotMan.Services.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GodotMan.Infrastructure.DependencyInjection;
 
 public static class InfrastructureServiceExtensions
 {
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddTransient<IReleaseService, ReleaseService>();
+        services.AddTransient<IInstallationService, InstallationService>();
+        return services;
+    }
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         string installationStorePath,
